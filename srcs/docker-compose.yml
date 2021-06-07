@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    db:
+        build: ./requirements/mariadb/
+        volumes:
+            - /data/mysql:/var/lib/mysql
+        restart: always
+
+    wordpress:
+        depends_on:
+            - db
+        build: ./requirements/wordpress/
+        volumes:
+            - /data/html:/var/www/html
+        restart: always
+
+    nginx:
+        build: ./requirements/nginx/
+        volumes:
+            - nginx:/etc/nginx/conf.d
+            - /data/html:/var/www/html
+        ports:
+            - "8000:80"
+        restart: always
+
+# volumes:
+    # db_data: {}
