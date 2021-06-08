@@ -1,28 +1,40 @@
 version: '3'
 
 services:
-    db:
+    mysql:
         build: ./requirements/mariadb/
         volumes:
-            - /data/mysql:/var/lib/mysql
+        - /data/mysql:/var/lib/mysql
+        env_file:
+        - .env
         restart: always
-
+        networks:
+          - backend
     wordpress:
         depends_on:
-            - db
+        - mysql
         build: ./requirements/wordpress/
         volumes:
-            - /data/html:/var/www/html
+        - /data/html:/var/www/html
+        env_file:
+        - .env
         restart: always
-
+        networks:
+        - backend
     nginx:
         build: ./requirements/nginx/
         volumes:
-            - nginx:/etc/nginx/conf.d
-            - /data/html:/var/www/html
+        - nginx:/etc/nginx/conf.d
+        - /data/html:/var/www/html
         ports:
-            - "8000:80"
+        - "8080:80"
         restart: always
+        networks:
+        - backend
 
-# volumes:
-    # db_data: {}
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  nginx:

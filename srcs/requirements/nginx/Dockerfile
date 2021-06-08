@@ -6,7 +6,7 @@ RUN		apt-get update && apt-get upgrade -y
 
 RUN		apt-get install -y nginx
 
-COPY	localhost /etc/nginx/sites-available/
+COPY	nginx.conf /etc/nginx/sites-available/locahost
 
 RUN		ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled \
 		&& mkdir -p /var/www/html/localhost/ \

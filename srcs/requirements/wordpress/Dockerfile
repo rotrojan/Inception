@@ -4,7 +4,7 @@ LABEL	maintainer="rotrojan <rotrojan@student.42.fr>"
 
 RUN		apt-get update && apt-get upgrade -y
 
-RUN		apt-get install -y wget php-fpm
+RUN		apt-get install -y wget php php-fpm
 
 RUN		wget https://wordpress.org/latest.tar.gz \
 		&& tar -xf latest.tar.gz \
