@@ -1,40 +1,58 @@
-version: '3'
+version: '3.5'
 
 services:
-    mysql:
+    mariadb:
         build: ./requirements/mariadb/
         volumes:
-        - /data/mysql:/var/lib/mysql
-        env_file:
-        - .env
-        restart: always
-        networks:
-          - backend
-    wordpress:
-        depends_on:
-        - mysql
-        build: ./requirements/wordpress/
-        volumes:
-        - /data/html:/var/www/html
+        - database:/var/lib/mysql
         env_file:
         - .env
         restart: always
         networks:
         - backend
+        stdin_open: true
+        tty: true
+    wordpress:
+        depends_on:
+        - mariadb
+        build: ./requirements/wordpress/
+        volumes:
+        - wordpress:/var/www/html
+        env_file:
+        - .env
+        restart: always
+        networks:
+        - backend
+        stdin_open: true
+        tty: true
     nginx:
         build: ./requirements/nginx/
         volumes:
-        - nginx:/etc/nginx/conf.d
-        - /data/html:/var/www/html
+        - wordpress:/var/www/html
+        env_file:
+        - .env
         ports:
         - "8080:80"
         restart: always
         networks:
         - backend
+        stdin_open: true
+        tty: true
 
 networks:
   backend:
     driver: bridge
 
 volumes:
-  nginx:
+  database:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "/home/rotrojan/data/database"
+  wordpress:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "/home/rotrojan/data/wordpress"
