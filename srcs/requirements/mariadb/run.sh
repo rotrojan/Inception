@@ -1,8 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
+chown -R mysql:mysql /var/lib/mysql
 mkdir -p /run/mysqld
-chown mysql:mysql -R /run/mysqld/
-chown mysql:mysql -R /var/lib/mysql/
-mysql_install_db
+chown -R mysql:mysql /run/mysqld
+# mysql << EOF
+# CREATE DATABASE ${MYSQL_DATABASE};
+# GRANT ALL ON ${MYSQL_DATABASE}.* TO ${MYSQL_USER}@${WORDPRESS_DB_HOST} WITH GRANT OPTION;
+# FLUSH PRIVILEGES;
+# EOF
+# mysql_install_db
 
-[ "$DEBUG" == 1 ] && exec /bin/bash || "$@"
+
+[ "$DEBUG" -eq 1 ] && exec /bin/bash || exec "$@"

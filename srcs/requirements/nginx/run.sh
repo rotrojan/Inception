@@ -1,8 +1,3 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
-if [ "$DEBUG" == 1 ]
-then
-	exec /bin/bash
-else
-	exec "$@"
-fi
+[ "$DEBUG" -eq 1 ] && exec /bin/bash || exec "$@"

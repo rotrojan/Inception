@@ -6,6 +6,7 @@ REQ = ./requirements
 DB_DIR = $(SRCS_DIR)/$(REQ)/$(DB)
 WP_DIR = $(SRCS_DIR)/$(REQ)/$(WP)
 WEBSERV_DIR = $(SRCS_DIR)/$(REQ)/$(WEBSERV_DIR)
+VOLUMES_DIR = /home/rotrojan/data
 
 all: $(NAME)
 
@@ -23,24 +24,29 @@ debug: dirs
 	$(DC) up -d
 
 dirs:
-	sudo mkdir -p /data/mysql && sudo chown -R mysql:mysql /data/mysql
-	sudo mkdir -p /data/html && sudo chown -R www-data:www-data /data/html
+	sudo mkdir -p $(VOLUMES_DIR)/database && sudo chown -R mysql:mysql $(VOLUMES_DIR)/database
+	sudo mkdir -p $(VOLUMES_DIR)/wordpress && sudo chown -R www-data:www-data $(VOLUMES_DIR)/wordpress
 
-mariadb:
-	docker attach srcs_mysql_1
+mariadb: debug
+	docker attach srcs_mariadb_1
 
-wordpress:
+wordpress: debug
 	docker attach srcs_wordpress_1
 
-nginx:
+nginx: debug
 	docker attach srcs_nginx_1
+
+check:
+	docker ps
+	$(DC) ps
 
 clean:
 	$(DC) down
 
-re: clean $(NAME)
+fclean: clean
+	sudo rm -rf $(VOLUMES_DIR)/database $(VOLUMES_DIR)/wordpress
+#	docker-compose system prune 
 
-fclean:
-	docker-compose system prune 
+re: fclean $(NAME)
 
 .PHONY: all $(NAME) build debug dirs mariadb wordpress nginx clean re

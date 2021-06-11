@@ -17,7 +17,7 @@ services:
         - mariadb
         build: ./requirements/wordpress/
         volumes:
-        - wordpress:/var/www/html
+        - wordpress:/var/www/html/localhost
         env_file:
         - .env
         restart: always
@@ -26,9 +26,11 @@ services:
         stdin_open: true
         tty: true
     nginx:
+        depends_on:
+        - wordpress
         build: ./requirements/nginx/
         volumes:
-        - wordpress:/var/www/html
+        - wordpress:/var/www/html/localhost
         env_file:
         - .env
         ports:

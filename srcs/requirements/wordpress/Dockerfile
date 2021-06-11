@@ -6,14 +6,9 @@ RUN			apt-get update && apt-get upgrade -y
 
 RUN			apt-get install -y wget php php-fpm php-mysql php-xml php-mbstring
 
-RUN			wget https://wordpress.org/latest.tar.gz \
-			&& tar -xf latest.tar.gz \
-			&& rm -rf latest.tar.gz \
-			&& mkdir -p /var/www/html/localhost/ \
-			&& mv /wordpress /var/www/html/localhost \
-			&& mkdir -p /run/php
+COPY		./wp-config.php /tmp
 
-COPY		./wp-config.php /var/www/html/localhost/wordpress
+COPY		./www.conf /etc/php/7.3/fpm/pool.d
 
 COPY		run.sh /usr/local/bin/
 
