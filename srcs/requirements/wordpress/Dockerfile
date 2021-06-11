@@ -8,8 +8,6 @@ RUN			apt-get install -y wget php php-fpm php-mysql php-xml php-mbstring
 
 COPY		./wp-config.php /tmp
 
-COPY		./www.conf /etc/php/7.3/fpm/pool.d
-
 COPY		run.sh /usr/local/bin/
 
 ENTRYPOINT	["run.sh"]
