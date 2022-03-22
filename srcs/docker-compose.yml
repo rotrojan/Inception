@@ -1,43 +1,46 @@
-version: '3.5'
+---
+version: '3.8'
 
 services:
     mariadb:
         build: ./requirements/mariadb/
         volumes:
-        - database:/var/lib/mysql
+          - database:/var/lib/mysql
         env_file:
-        - .env
-        restart: always
+          - .env
+        ports:
+          - "3306:3306"
+        restart: on-failure
         networks:
-        - backend
+          - backend
         stdin_open: true
         tty: true
     wordpress:
         depends_on:
-        - mariadb
+          - mariadb
         build: ./requirements/wordpress/
         volumes:
-        - wordpress:/var/www/html/localhost
+          - wordpress:/var/www/html/localhost
         env_file:
-        - .env
-        restart: always
+          - .env
+        restart: on-failure
         networks:
-        - backend
+          - backend
         stdin_open: true
         tty: true
     nginx:
         depends_on:
-        - wordpress
+          - wordpress
         build: ./requirements/nginx/
         volumes:
-        - wordpress:/var/www/html/localhost
+          - wordpress:/var/www/html/localhost
         env_file:
-        - .env
+          - .env
         ports:
-        - "8080:80"
-        restart: always
+          - "8080:80"
+        restart: on-failure
         networks:
-        - backend
+          - backend
         stdin_open: true
         tty: true
 
@@ -51,10 +54,10 @@ volumes:
     driver_opts:
       type: "none"
       o: "bind"
-      device: "/home/rotrojan/data/database"
+      device: "/data/mysql"
   wordpress:
     driver: local
     driver_opts:
       type: "none"
       o: "bind"
-      device: "/home/rotrojan/data/wordpress"
+      device: "/data/html"

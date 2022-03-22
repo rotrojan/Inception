@@ -1,52 +1,24 @@
-NAME = inception
+MKDIR = mkdir -p
 SRCS_DIR = ./srcs
-DC_FILE = docker-compose.yml
-DC = docker-compose -f $(SRCS_DIR)/$(DC_FILE) --env-file $(SRCS_DIR)/.env
-REQ = ./requirements
-DB_DIR = $(SRCS_DIR)/$(REQ)/$(DB)
-WP_DIR = $(SRCS_DIR)/$(REQ)/$(WP)
-WEBSERV_DIR = $(SRCS_DIR)/$(REQ)/$(WEBSERV_DIR)
-VOLUMES_DIR = /home/rotrojan/data
+DOCKER_COMPOSE_FILE = $(SRCS_DIR)/docker-compose.yml
+ENV_FILE = $(SRCS_DIR)/.env
 
-all: $(NAME)
-
-$(NAME): build dirs
-	$(DC) up -d
-
-build:
-	sed -i '/DEBUG=/d' $(SRCS_DIR)/.env
-	$(DC) build
-
-debug: dirs
-	sed -i '/DEBUG=/d' $(SRCS_DIR)/.env
-	echo DEBUG=1 >> $(SRCS_DIR)/.env
-	$(DC) build
-	$(DC) up -d
-
-dirs:
-	sudo mkdir -p $(VOLUMES_DIR)/database && sudo chown -R mysql:mysql $(VOLUMES_DIR)/database
-	sudo mkdir -p $(VOLUMES_DIR)/wordpress && sudo chown -R www-data:www-data $(VOLUMES_DIR)/wordpress
-
-mariadb: debug
-	docker attach srcs_mariadb_1
-
-wordpress: debug
-	docker attach srcs_wordpress_1
-
-nginx: debug
-	docker attach srcs_nginx_1
+build: /data/mysql /data/html
+	docker-compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE) up
 
 check:
-	docker ps
-	$(DC) ps
+	docker-compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE) ps
 
-clean:
-	$(DC) down
+logs:
+	docker-compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE) logs
 
-fclean: clean
-	sudo rm -rf $(VOLUMES_DIR)/database $(VOLUMES_DIR)/wordpress
-#	docker-compose system prune 
+stop:
+	docker-compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE) stop
 
-re: fclean $(NAME)
+/data/mysql:
+	sudo $(MKDIR) /data/mysql && sudo chown -R mysql:mysql /data/mysql
 
-.PHONY: all $(NAME) build debug dirs mariadb wordpress nginx clean re
+/data/html:
+	sudo $(MKDIR) /data/html && sudo chown -R www-data:www-data /data/html
+
+.PHONY: build dirs check logs
