@@ -2,13 +2,13 @@
 /**
  * The base configuration for WordPress
  *
- * The wp-config.php creation script uses this file during the
- * installation. You don't have to use the web site, you can
- * copy this file to "wp-config.php" and fill in the values.
+ * The wp-config.php creation script uses this file during the installation.
+ * You don't have to use the web site, you can copy this file to "wp-config.php"
+ * and fill in the values.
  *
  * This file contains the following configurations:
  *
- * * MySQL settings
+ * * Database settings
  * * Secret keys
  * * Database table prefix
  * * ABSPATH
@@ -18,47 +18,49 @@
  * @package WordPress
  */
 
-// ** MySQL settings - You can get this info from your web host ** //
+// ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define( 'DB_NAME', 'db_name' );
 
-/** MySQL database username */
-define( 'DB_USER', 'user_name' );
+/** Database username */
+define( 'DB_USER', 'db_username' );
 
-/** MySQL database password */
-define( 'DB_PASSWORD', 'user_pass' );
+/** Database password */
+define( 'DB_PASSWORD', 'db_password' );
 
-/** MySQL hostname */
+/** Database hostname */
 define( 'DB_HOST', 'localhost' );
 
-/** Database Charset to use in creating database tables. */
+/** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
 
-/** The Database Collate type. Don't change this if in doubt. */
+/** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
 /**#@+
- * Authentication Unique Keys and Salts.
+ * Authentication unique keys and salts.
  *
- * Change these to different unique phrases!
- * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
- * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
+ * Change these to different unique phrases! You can generate these using
+ * the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}.
+ *
+ * You can change these at any point in time to invalidate all existing cookies.
+ * This will force all users to have to log in again.
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         'put your unique phrase here' );
-define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
-define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
-define( 'NONCE_KEY',        'put your unique phrase here' );
-define( 'AUTH_SALT',        'put your unique phrase here' );
-define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
-define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
-define( 'NONCE_SALT',       'put your unique phrase here' );
+define('AUTH_KEY',         '*9YExbkNsU?_2*-Et`!?J%0N4s): eAIdJ[a=)pnq3OnH,RDR}-EKFC<kHLMY Gi');
+define('SECURE_AUTH_KEY',  '?z!Nb+-!p>-t>BW1`nf<QOEExb?-;_w#)6#ma9N)lR4UYOL5+gcr$G+X_Zm,ng[j');
+define('LOGGED_IN_KEY',    ' qJAj<_n6$VlCs=hN^DjIjxZ*b+2_*nWqpiqN*+:q`(D5ZdU;rhVxd aDZTX_oq{');
+define('NONCE_KEY',        'q:mgZ19z#Z-gP72|0XyNtx7cl%x CaqL(/_;C78U+P<KFy+++5.-U^*$BC):Oe6R');
+define('AUTH_SALT',        'D63;_-nb86Z kf7.PtHgl&=]I.zd0-8Bhk:otF=;DDi1=ruz1LFXfC*lLYdDFbSV');
+define('SECURE_AUTH_SALT', 'e!{@<]W&QV;*mq~ }I75XZ)hMV$Wh|CrV:Hap 3&emjZzAsgnGPSCN+43;5Y8u_%');
+define('LOGGED_IN_SALT',   'f>kEI8QoV=?d}>./B_np-vz|cCj0kBlpG.|rBShI(.|5s WB9<M_ZS50)DiAc2R+');
+define('NONCE_SALT',       'rTK7oQ<8|~$OM|IGHQob#ChuC2&27oSxF-+t=5Wm.%@)wVqz*eiyNeAG.Gi|Y=r5');
 
 /**#@-*/
 
 /**
- * WordPress Database Table prefix.
+ * WordPress database table prefix.
  *
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
@@ -78,6 +80,10 @@ $table_prefix = 'wp_';
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
 define( 'WP_DEBUG', false );
+
+/* Add any custom values between this line and the "stop editing" line. */
+
+
 
 /* That's all, stop editing! Happy publishing. */
 

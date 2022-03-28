@@ -41,6 +41,8 @@ services:
         restart: on-failure
         networks:
           - backend
+        links:
+          - wordpress
         stdin_open: true
         tty: true
 
