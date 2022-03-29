@@ -35,4 +35,6 @@ clean:
 prune:
 	docker system prune -a
 
-.PHONY: build check logs stop clean prune
+re: clean build
+
+.PHONY: build check logs stop clean prune re
