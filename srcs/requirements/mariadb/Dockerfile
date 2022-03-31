@@ -10,6 +10,8 @@ COPY		run.sh /usr/local/bin/
 
 EXPOSE		3306
 
+COPY		50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+
 ENTRYPOINT	["run.sh"]
 
-CMD		["mysqld_safe"]
+#CMD		["mysqld"]

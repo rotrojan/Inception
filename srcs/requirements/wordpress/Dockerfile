@@ -5,6 +5,7 @@ LABEL		maintainer="rotrojan <rotrojan@student.42.fr>"
 RUN		apt-get update && apt-get upgrade -y
 
 RUN		apt-get install -y wget \
+			mariadb-client \
 			php-fpm \
 			php-curl \
 			php-gd \
@@ -31,8 +32,8 @@ RUN		mkdir -p $WP_DIR && wp core download --path=$WP_DIR --user=www-data --allow
 		&& chown -R www-data:www-data $WP_DIR
 
 COPY		wp-config.php $WP_DIR
-COPY		run.sh /usr/local/bin/
 
+COPY		run.sh /usr/local/bin/
 
 ENTRYPOINT	["run.sh"]
 
