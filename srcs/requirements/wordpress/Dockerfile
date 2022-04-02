@@ -1,10 +1,8 @@
-FROM		debian:buster
+FROM		alpine:3.14
 
 LABEL		maintainer="rotrojan <rotrojan@student.42.fr>"
 
-RUN		apt-get update && apt-get upgrade -y
-
-RUN		apt-get install -y wget \
+RUN		apk add --no-cache wget \
 			mariadb-client \
 			php-fpm \
 			php-curl \
@@ -20,10 +18,18 @@ RUN		apt-get install -y wget \
 
 RUN		mkdir -p /run/php
 
-#install wp-cli
+ARG		USER=wordpress
+
+RUN		adduser $USER
+
+USER		$USER
+
+#install wp-cli and grants exectution rights to www-data
 RUN		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 		-O /usr/local/bin/wp \
+		&& chown $USER /usr/local/bin/wp \
 		&& chmod u+x /usr/local/bin/wp
+
 
 ARG		WP_DIR=/var/www/html/localhost/wordpress
 

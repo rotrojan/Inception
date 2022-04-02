@@ -1,10 +1,8 @@
-FROM		debian:buster
+FROM		alpine:3.14
 
 LABEL		maintainer="rotrojan <rotrojan@student.42.fr>"
 
-RUN		apt-get update && apt-get upgrade -y
-
-RUN		apt-get install -y mariadb-server
+RUN		apk add --no-cache mariadb
 
 COPY		run.sh /usr/local/bin/
 
@@ -12,6 +10,8 @@ EXPOSE		3306
 
 COPY		50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
+#USER		www-data
+
 ENTRYPOINT	["run.sh"]
 
-#CMD		["mysqld"]
+CMD		["tail", "-f"]

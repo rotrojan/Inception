@@ -30,10 +30,9 @@ services:
       WORDPRESS_TABLE_PREFIX: wp_
 
   nginx:
-    image: nginx:alpine
+    build: ./requirements/nginx/
     volumes:
-      - ../nginx:/etc/nginx/conf.d
-      - wordpress:/var/www/html
+      - wordpress:/var/www/html/localhost
     ports:
       - 8080:80
     networks:
