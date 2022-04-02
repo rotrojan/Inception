@@ -2,64 +2,75 @@
 version: '3.8'
 
 services:
-    mariadb:
-        build: ./requirements/mariadb/
-        volumes:
-          - database:/var/lib/mysql
-        env_file:
-          - .env
-        ports:
-          - "3306:3306"
-        restart: on-failure
-        networks:
-          - backend
-        stdin_open: true
-        tty: true
-    wordpress:
-        depends_on:
-          - mariadb
-        build: ./requirements/wordpress/
-        volumes:
-          - wordpress:/var/www/html/localhost
-        env_file:
-          - .env
-        restart: on-failure
-        networks:
-          - backend
-        stdin_open: true
-        tty: true
-    nginx:
-        depends_on:
-          - wordpress
-        build: ./requirements/nginx/
-        volumes:
-          - wordpress:/var/www/html/localhost
-        env_file:
-          - .env
-        ports:
-          - "8080:80"
-        restart: on-failure
-        networks:
-          - backend
-        links:
-          - wordpress
-        stdin_open: true
-        tty: true
 
-networks:
-  backend:
-    driver: bridge
+  mysql:
+    image: mariadb
+    volumes:
+      - database:/var/lib/mysql
+    networks:
+      - backend
+    restart: on-failure
+    env_file:
+      - .env
+
+  wordpress:
+    image: wordpress:php7.3-fpm-alpine
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - backend
+    restart: on-failure
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: $MYSQL_DATABASE
+      WORDPRESS_DB_USER: $MYSQL_USER
+      WORDPRESS_DB_PASSWORD: $MYSQL_PASSWORD
+      WORDPRESS_TABLE_PREFIX: wp_
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ../nginx:/etc/nginx/conf.d
+      - wordpress:/var/www/html
+    ports:
+      - 8080:80
+    networks:
+      - backend
+    restart: on-failure
+
+# The default volume driver on linux is `local`.
+# Others drivers allow to save the volume on the cloud, do encryption, etc.
+# The options are specific to the driver.
+# The built-in `local` driver on Linux accepts options similar to the linux `mount(8)` command.
 
 volumes:
+
   database:
     driver: local
     driver_opts:
       type: "none"
       o: "bind"
-      device: "/data/mysql"
+      device: "${HOME}/data/mysql"
+
   wordpress:
     driver: local
     driver_opts:
       type: "none"
       o: "bind"
-      device: "/data/html"
+      device: "${HOME}/data/html"
+
+# The default driver for networks creation is `bridge`.
+# Docker-compose automatically creates a network to allow containers to communicate with each others.
+# However, creating a user-defined network presents several advantages uppon the default one:
+# - automatic DNS resolution between containers using the container's name (`ping <container_name>`);
+# - better isolation (all containers without a network specified are attached to the default bridge network);
+# - containers can be attached and detached from user-defined networks on the fly;
+# - each user-defined network creates a configurable bridge;
+# - linked containers on the default bridge network share environment variables.
+
+networks:
+
+  backend:
+    driver: bridge

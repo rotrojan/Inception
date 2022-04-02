@@ -3,7 +3,7 @@ SRCS_DIR = ./srcs
 DOCKER_COMPOSE_FILE = $(SRCS_DIR)/docker-compose.yml
 ENV_FILE = $(SRCS_DIR)/.env
 RM = rm
-DATA_DIR = /data
+DATA_DIR = $(HOME)/data
 DB_DIR = $(DATA_DIR)/mysql
 WP_DIR = $(DATA_DIR)/html
 
