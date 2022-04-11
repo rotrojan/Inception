@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-wp db create --path=$WP_DIR --allow-root
+#wp db create --path=$WP_DIR --allow-root
 #wp core install --url=localhost --title=my_awesome_wordpress --admin-user=db_username --admin-pass=db_password --allow-root
 
 #echo "<?php phpinfo(); ?>" > /var/www/html/localhost/wordpress/phpinfo.php
