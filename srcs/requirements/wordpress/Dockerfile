@@ -20,24 +20,26 @@ RUN		apk add --no-cache wget \
 
 RUN		apk add bash
 
+# configure php-fpm
+RUN		sed -i 's/;clear_env = no/clear_env = no/' /etc/php7/php-fpm.d/www.conf
+
 ARG		USER=wordpress
 
-ARG		WP_DIR=/var/www/html/localhost/wordpress
+ARG		WP_DIR=/var/www/inception/wordpress
 
 RUN		mkdir -p "$WP_DIR" \
-		&& addgroup -S "$USER" && adduser -D -S -G "$USER" -h "$WP_DIR" "$USER"
+		&& addgroup -S "$USER" \
+		&& adduser -D -S -G "$USER" -H "$USER" \
+		&& chown -R "$USER":"$USER" "$WP_DIR"
 
-
-# install wp-cli and grants exectution rights to www-data
+# install wp-cli and grants exectution rights to $USER
 RUN		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 		-O /usr/local/bin/wp \
-		&& chown -R "$USER" /usr/local/bin/wp \
+		&& chown "$USER" /usr/local/bin/wp \
 		&& chown -R "$USER" /etc/php7 /var/log/php7 \
 		&& chmod u+x /usr/local/bin/wp
 
-USER		"$USER"
-
-COPY		wp-config.php "$WP_DIR"
+#USER		"$USER"
 
 # download wordpress
 RUN		wp core download --path="$WP_DIR" --user="$USER"

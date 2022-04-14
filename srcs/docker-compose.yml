@@ -16,7 +16,7 @@ services:
   wordpress:
     build: ./requirements/wordpress/
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/var/www/
     depends_on:
       - mysql
     networks:
@@ -34,7 +34,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wordpress:/var/www/html/localhost
+      - wordpress:/var/www/
     ports:
       - 8080:80
     networks:
