@@ -4,7 +4,7 @@ version: '3.8'
 services:
 
   mysql:
-    image: mariadb
+    build: ./requirements/mariadb/
     volumes:
       - database:/var/lib/mysql
     networks:

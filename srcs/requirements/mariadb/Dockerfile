@@ -2,16 +2,18 @@ FROM		alpine:3.14
 
 LABEL		maintainer="rotrojan <rotrojan@student.42.fr>"
 
-RUN		apk add --no-cache mariadb
+RUN		apk update && apk upgrade && apk add --no-cache mariadb mariadb-client
+
+RUN		mkdir -p /run/mysqld /var/lib/mysql \
+		&& chown -R mysql:mysql /run/mysqld /var/lib/mysql \
+		&& mariadb-install-db --skip-test-db --user=mysql --datadir=/var/lib/mysql
 
 COPY		run.sh /usr/local/bin/
+COPY		mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
 EXPOSE		3306
 
-COPY		50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-
-#USER		www-data
-
 ENTRYPOINT	["run.sh"]
 
-CMD		["tail", "-f"]
+CMD		["mysqld_safe"]
+#CMD		["tail", "-f"]
