@@ -3,8 +3,10 @@ version: '3.8'
 
 services:
 
-  mysql:
+  mariadb:
     build: ./requirements/mariadb/
+    image: mariadb
+    container_name: mariadb
     volumes:
       - database:/var/lib/mysql
     networks:
@@ -15,10 +17,12 @@ services:
 
   wordpress:
     build: ./requirements/wordpress/
+    image: wordpress
+    container_name: wordpress
     volumes:
       - wordpress:/var/www/
     depends_on:
-      - mysql
+      - mariadb
     networks:
       - backend
     restart: on-failure
@@ -31,6 +35,8 @@ services:
 
   nginx:
     build: ./requirements/nginx/
+    image: nginx
+    container_name: nginx
     depends_on:
       - wordpress
     volumes:

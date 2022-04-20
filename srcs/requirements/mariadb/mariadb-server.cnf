@@ -10,6 +10,8 @@
 user=mysql
 skip-networking
 port=3306
+socket=/run/mysqld/mysqld.sock
+pid-file=/run/mysqld/mysqld.pid
 
 # Galera-related settings
 [galera]
