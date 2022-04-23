@@ -8,12 +8,12 @@ RUN		mkdir -p /run/mysqld /var/lib/mysql \
 		&& chown -R mysql:mysql /run/mysqld /var/lib/mysql \
 		&& mariadb-install-db --skip-test-db --user=mysql --datadir=/var/lib/mysql
 
+RUN		sed -i 's/skip-networking/#&/' /etc/my.cnf.d/mariadb-server.cnf
+
 COPY		run.sh /usr/local/bin/
-COPY		mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
 EXPOSE		3306
 
 ENTRYPOINT	["run.sh"]
 
 CMD		["mysqld_safe"]
-#CMD		["tail", "-f"]
