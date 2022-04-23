@@ -42,7 +42,7 @@ services:
     volumes:
       - wordpress:/var/www/
     ports:
-      - 8080:80
+      - 443:443
     networks:
       - backend
     restart: on-failure

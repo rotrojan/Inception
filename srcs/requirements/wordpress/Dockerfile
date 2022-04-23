@@ -42,7 +42,7 @@ RUN		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.p
 # download wordpress
 RUN		wp core download --path="$WP_DIR" --user="$USER"
 
-#USER		"$USER"
+USER		"$USER"
 
 COPY		run.sh /usr/local/bin/
 COPY		wp-config.php "$WP_DIR"
