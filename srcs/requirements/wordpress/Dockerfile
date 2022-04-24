@@ -18,13 +18,13 @@ RUN		apk add --no-cache wget \
 			php-json \
 			php-phar
 
-# configure php-fpm
-RUN		sed -i 's/;clear_env = no/clear_env = no/ ; s/127.0.0.1/0.0.0.0/' \
-		/etc/php7/php-fpm.d/www.conf
-
-ARG		USER=wordpress
+ARG		USER=nginx
 
 ARG		WP_DIR=/var/www/inception/wordpress
+
+# configure php-fpm
+RUN		sed -i 's/;clear_env = no/clear_env = no/ ; s/127.0.0.1/0.0.0.0/ ; s/nobody/nginx/g' \
+		/etc/php7/php-fpm.d/www.conf
 
 # create the user for wordpress
 RUN		mkdir -p "$WP_DIR" \
@@ -42,9 +42,8 @@ RUN		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.p
 # download wordpress
 RUN		wp core download --path="$WP_DIR" --user="$USER"
 
-USER		"$USER"
-
 COPY		run.sh /usr/local/bin/
+
 COPY		wp-config.php "$WP_DIR"
 
 EXPOSE		9000
