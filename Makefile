@@ -7,7 +7,10 @@ DATA_DIR = $(HOME)/data
 DB_DIR = $(DATA_DIR)/mysql
 WP_DIR = $(DATA_DIR)/html
 
-build: $(DB_DIR) $(WP_DIR)
+host:
+	grep '127.0.0.1\s*rotrojan.42.fr' /etc/hosts || sudo sh -c 'echo "127.0.0.1\trotrojan.42.fr" >> /etc/hosts'
+
+build: $(DB_DIR) $(WP_DIR) host
 	docker-compose -f $(DOCKER_COMPOSE_FILE) up --build -d
 
 check:
@@ -52,4 +55,4 @@ prune:
 
 re: clean down build
 
-.PHONY: build check logs stop clean prune re debug
+.PHONY: build check logs stop clean prune re debug host
