@@ -21,7 +21,7 @@ RUN		apk update \
 
 ARG		USER=nginx
 
-ARG		WP_DIR=/var/www/inception/wordpress
+ENV		WP_DIR=/var/www/inception/wordpress
 
 # configure php-fpm
 RUN		sed -i "s/;clear_env = no/clear_env = no/ ; s/127.0.0.1/0.0.0.0/ ; s/nobody/$USER/g" \
@@ -46,10 +46,6 @@ RUN		apk --no-cache add wget \
 RUN		wp core download --path=$WP_DIR --user=$USER
 
 COPY		run.sh /usr/local/bin/
-
-COPY		wp-config.php "$WP_DIR"
-
-EXPOSE		9000
 
 ENTRYPOINT	["run.sh"]
 

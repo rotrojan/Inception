@@ -7,11 +7,11 @@ DATA_DIR = $(HOME)/data
 DB_DIR = $(DATA_DIR)/mysql
 WP_DIR = $(DATA_DIR)/html
 
-host:
-	grep '127.0.0.1\s*rotrojan.42.fr' /etc/hosts || sudo sh -c 'echo "127.0.0.1\trotrojan.42.fr" >> /etc/hosts'
-
 build: $(DB_DIR) $(WP_DIR) host
 	docker-compose -f $(DOCKER_COMPOSE_FILE) up --build -d
+
+host:
+	grep '127.0.0.1\s*rotrojan.42.fr' /etc/hosts || sudo sh -c 'echo "127.0.0.1\trotrojan.42.fr" >> /etc/hosts'
 
 check:
 	docker-compose -f $(DOCKER_COMPOSE_FILE) ps
@@ -26,25 +26,10 @@ down:
 	docker-compose -f $(DOCKER_COMPOSE_FILE) down --volume
 
 $(DB_DIR):
-	sudo $(MKDIR) $@ && sudo chown -R mysql:mysql $@
+	sudo $(MKDIR) $@
 
 $(WP_DIR):
-	sudo $(MKDIR) $@ && sudo chown -R www-data:www-data $@
-
-debug:
-	# Declare the DEBUG variable and set it to 1 in order to easily debug the containers (see the run.sh for each container);
-	sed -i '/DEBUG-/d' $(ENV_FILE)
-	echo DEBUG=1 >> $(ENV_FILE)
-	$(MAKE) build
-
-mariadb: debug
-	docker attach srcs_mariadb_1
-
-nginx: debug
-	docker attach srcs_nginx_1
-
-wordpress: debug
-	docker attach srcs_wordpress_1
+	sudo $(MKDIR) $@
 
 clean:
 	sudo $(RM) -rf $(DB_DIR) $(WP_DIR)
@@ -55,4 +40,4 @@ prune:
 
 re: clean down build
 
-.PHONY: build check logs stop clean prune re debug host
+.PHONY: build check logs stop down clean prune re debug host

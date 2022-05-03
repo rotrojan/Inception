@@ -19,9 +19,8 @@ DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.
 # and we also delete the empty user for security reasons
 DELETE FROM mysql.user WHERE User='';
 
-# then we create the database and start working on it
+# then we create the database
 CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
-USE $MYSQL_DATABASE;
 
 # we create an admin user and we give him all privileges on the database
 CREATE USER '$MYSQL_ADMIN'@'%' IDENTIFIED BY '$MYSQL_ADMIN_PASSWORD';

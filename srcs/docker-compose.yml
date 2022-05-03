@@ -26,12 +26,8 @@ services:
     networks:
       - backend
     restart: on-failure
-    environment:
-      WORDPRESS_DB_HOST: mysql
-      WORDPRESS_DB_NAME: $MYSQL_DATABASE
-      WORDPRESS_DB_USER: $MYSQL_USER
-      WORDPRESS_DB_PASSWORD: $MYSQL_ADMIN_PASSWORD
-      WORDPRESS_TABLE_PREFIX: wp_
+    env_file:
+      - .env
 
   nginx:
     build: ./requirements/nginx/

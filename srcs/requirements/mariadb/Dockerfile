@@ -14,8 +14,6 @@ RUN		sed -i 's/skip-networking/#&/' /etc/my.cnf.d/mariadb-server.cnf
 
 COPY		run.sh /usr/local/bin/
 
-EXPOSE		3306
-
 ENTRYPOINT	["run.sh"]
 
 CMD		["mysqld_safe"]
