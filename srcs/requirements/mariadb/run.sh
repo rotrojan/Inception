@@ -1,16 +1,16 @@
 #!/usr/bin/env sh
 
 # launch mariadb server
-mysqld_safe &
+mysqld_safe & 
 
 # we need to wait for the server to be running before passing it the SQL script
 sleep 2
-until mysqladmin ping; do
+until mysqladmin ping 2> /dev/null; do
 	sleep 1
 done
 
 # now let's pass the SQL script
-mysql -u root << EOF
+mysql -u root 2> /dev/null << EOF
 
 # first, we set the password and disable remote connection for the root user
 ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
@@ -30,5 +30,5 @@ FLUSH PRIVILEGES;
 EOF
 
 # finaly, we restart mariadb
-mysqladmin --user=root --password=$MYSQL_ROOT_PASSWORD shutdown
+mysqladmin --user=root --password=$MYSQL_ROOT_PASSWORD shutdown 2> /dev/null
 exec "$@"

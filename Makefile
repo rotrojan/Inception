@@ -38,6 +38,6 @@ clean:
 prune:
 	docker system prune -a
 
-re: clean down build
+re: down clean build
 
-.PHONY: build check logs stop down clean prune re debug host
+.PHONY: build host check logs stop down clean prune re

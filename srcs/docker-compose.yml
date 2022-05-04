@@ -10,7 +10,7 @@ services:
     volumes:
       - database:/var/lib/mysql
     networks:
-      - backend
+      - inception_network
     restart: on-failure
     env_file:
       - .env
@@ -24,7 +24,7 @@ services:
     depends_on:
       - mariadb
     networks:
-      - backend
+      - inception_network
     restart: on-failure
     env_file:
       - .env
@@ -40,7 +40,7 @@ services:
     ports:
       - 443:443
     networks:
-      - backend
+      - inception_network
     restart: on-failure
 
 # The default volume driver on linux is `local`.
@@ -51,6 +51,7 @@ services:
 volumes:
 
   database:
+    name: database_volume
     driver: local
     driver_opts:
       type: "none"
@@ -58,6 +59,7 @@ volumes:
       device: "${HOME}/data/mysql"
 
   wordpress:
+    name: wordpress_volume
     driver: local
     driver_opts:
       type: "none"
@@ -75,5 +77,6 @@ volumes:
 
 networks:
 
-  backend:
+  inception_network:
+    name: inception_network
     driver: bridge
