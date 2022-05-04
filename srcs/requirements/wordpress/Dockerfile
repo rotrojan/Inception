@@ -27,19 +27,19 @@ ENV		WP_DIR=/var/www/inception/wordpress
 RUN		sed -i "s/;clear_env = no/clear_env = no/ ; s/127.0.0.1/0.0.0.0/ ; s/nobody/$USER/g" \
 			/etc/php7/php-fpm.d/www.conf
 
-# create the user for wordpress
+# create the user for wordpress and give him the rights on the php directories
 RUN		mkdir -p $WP_DIR \
 		&& addgroup -S $USER \
 		&& adduser -D -S -G $USER -H $USER \
-		&& chown -R $USER:$USER $WP_DIR
+		&& chown -R $USER:$USER $WP_DIR \
+		&& chown -R $USER /etc/php7 /var/log/php7
 
-# install wp-cli and grants execution rights to the wordpress user
+# install wp-cli and grant execution rights to the wordpress user
 RUN		apk --no-cache add wget \
 		&& wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 			-O /usr/local/bin/wp \
 		&& apk --no-cache add wget \
 		&& chown $USER /usr/local/bin/wp \
-		&& chown -R $USER /etc/php7 /var/log/php7 \
 		&& chmod u+x /usr/local/bin/wp
 
 # download wordpress
